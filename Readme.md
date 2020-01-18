@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Роман Голота](https://up.htmlacademy.ru/javascript/19/user/803115).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Фаллер] (https://htmlacademy.ru/profile/id505933).
 
 ---
 
