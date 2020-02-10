@@ -1,7 +1,7 @@
 'use strict';
 
 var OBJECTS_QUANTITY = 8;
-var ARRAY_AVATAR = 'img/avatars/user0' + Math.floor(Math.random() * 8) + '.png';
+var ARRAY_AVATAR = function () { return 'img/avatars/user0' + (Math.floor(Math.random() * 8) + 1) + '.png';}
 var ARRAY_TITLE = 'some random title';
 var ARRAY_ADDRESS = 'location.x, location.y';
 var ARRAY_PRICE = Math.floor(Math.random() * 1000);
@@ -19,9 +19,9 @@ var ARRAY_DESCRIPTION = 'some random description';
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var LOCATION_X = Math.floor(Math.random() * 3000);
-var LOCATION_Y = Math.floor(Math.random() * 500 + 130);
-var PIN_SIZE = 40;
+var LOCATION_X = Math.floor(Math.random() * document.body.offsetWidth) + 1;
+var LOCATION_Y = Math.floor(Math.random() * 630) + 130;
+var PIN_SIZE = 200;
 
 var MAP = document.querySelector('.map');
 var PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -44,7 +44,7 @@ var createArrayData = function () {
   for (var i = 0; i < OBJECTS_QUANTITY; i++) {
     array.push({
       'author': {
-        'avatar': ARRAY_AVATAR
+        'avatar': ARRAY_AVATAR()
       },
       'offer': {
         'title': ARRAY_TITLE,
@@ -75,21 +75,54 @@ MAP.classList.remove('map--faded');
 // 3. Создание DOM элементов и заполнение их данными из массива.
 
 var getDescription = function () {
-  var pinElement = PIN_TEMPLATE.cloneNode(true);
-  createArrayData().forEeach(function (item) {
-    pinElement.querySelector('.pin__img').src = item.avatar;
-    pinElement.querySelector('.pin__img').alt = item.title;
-    pinElement.querySelector('.map-pin').style.left = item.location.x + (PIN_SIZE * Math.random());
-    pinElement.querySelector('.map-pin').style.top = item.location.y + (PIN_SIZE * Math.random());
+  var pinElements = [];
+
+  var pins = createArrayData();
+  pins.forEach(function (item) {
+    var pinElement = PIN_TEMPLATE.cloneNode(true);
+
+    pinElement.querySelector('.pin__img').src = item.author.avatar;
+    pinElement.querySelector('.pin__img').alt = item.offer.title;
+    pinElement.style.left = item.location.x + (PIN_SIZE * Math.random()) + 'px';
+    pinElement.style.top = item.location.y + (PIN_SIZE * Math.random()) + 'px';
+
+    pinElements.push(pinElement);
   });
-  return pinElement;
+
+  return pinElements;
 };
 
 var fragment = document.createDocumentFragment();
-createArrayData().forEach(function (item, i) {
-  fragment.appendChild(getDescription(item, i));
-});
+// createArrayData().forEach(function (item, i) {
+//   var pins = getDescription(item, i);
 
+//   pins.forEach(function (pin) {
+//     fragment.appendChild(pin);
+//   });
+// });
+
+function getPinElement(pinObject) {
+  var pinElement = PIN_TEMPLATE.cloneNode(true);
+
+    pinElement.querySelector('.pin__img').src = pinObject.author.avatar;
+    pinElement.querySelector('.pin__img').alt = pinObject.offer.title;
+    pinElement.style.left = pinObject.location.x + (PIN_SIZE * Math.random()) + 'px';
+    pinElement.style.top = pinObject.location.y + (PIN_SIZE * Math.random()) + 'px';
+
+    return pinElement;
+}
+
+function generatePins() {
+  var pinObjects = createArrayData();
+
+  pinObjects.forEach(function (item) {
+      var pinElement = getPinElement(item);
+
+      fragment.appendChild(pinElement);
+  });
+}
+
+generatePins();
 // 4. Отрисовка сгенерированных DOM-элементов в блок .map__pins.
 
 PIN_WRAPPER.appendChild(fragment);
