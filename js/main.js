@@ -7,10 +7,14 @@ var ARRAY_ADDRESS = 'location.x, location.y';
 var ARRAY_PRICE = Math.floor(Math.random() * 1000);
 var ARRAY_TYPE = ["flat", "palace", "house" , "bungalo"];
 var ARRAY_ROOMS = Math.floor((Math.random() * 3) + 1);
-var ARRAY_QUESTS = Math.floor((Math.random() * 4) + 1);      
+var ARRAY_QUESTS = Math.floor((Math.random() * 4) + 1);
 var ARRAY_CHECKIN = ["12:00", "13:00", "14:00"];
 var ARRAY_CHECKOUT = ["12:00", "13:00", "14:00"];
-var FEATURES = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
+var FEATURES = ["wifi",
+"dishwasher",
+"parking", "washer",
+"elevator",
+"conditioner"];
 var ARRAY_DESCRIPTION = "some random description";
 var PHOTOS = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg",
 "http://o0.github.io/assets/images/tokyo/hotel2.jpg",
@@ -20,24 +24,21 @@ var LOCATION_Y = Math.floor(Math.random() * 500 + 130);
 var PIN_SIZE = 40;
 
 var MAP = document.querySelector('.map');
-var PIN_TEMPLATE = document.querySelector('#pin').textContent.querySelector('.map__pin');
+var PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('.map__pin');
 var PIN_WRAPPER = document.querySelector('.map__pins');
 
-var getRandomLength = function (Data) { //Возвращает массив рандомной длины
-    Data.length = Math.round(Math.random() * Data.length); 
-  if (Data.length < 1) {
-    getRandomLength(Data)
-  }
-  return Data;                
+var getRandomLength = function (data) { // Возвращает массив рандомной длины
+  data.length = Math.floor(Math.random() * data.length + 1);
+  return data;
 };
 
-var getRandomValue = function (Value) { //Возвращает рандомный элемент массива
-return Value[Math.floor(Math.random() * Value.length)]
+var getRandomValue = function (value) { // Возвращает рандомный элемент массива
+return value[Math.floor(Math.random() * value.length)]
 };
 
 var array = [];
 
-// 1.Функция для создания массива из сгенерированных объектов.  
+// 1.Функция для создания массива из сгенерированных объектов.
 
 var createArrayData = function () {
   for (var i = 0; i < OBJECTS_QUANTITY; i++) {
@@ -58,7 +59,7 @@ var createArrayData = function () {
         "description": ARRAY_DESCRIPTION,
         "photos": getRandomLength(PHOTOS)
     },
-    "location": {                
+    "location": {
         "x": LOCATION_X,
         "y": LOCATION_Y
       }
