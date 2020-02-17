@@ -41,7 +41,8 @@ var getRandomLength = function (data) { // Возвращает массив р�
 // Переменные
 var array = [];
 var forms = document.querySelector('.ad-form');
-var mapFilters = document.querySelector('.map__filters');
+var filters = document.querySelector('.map__filters');
+
 
 // 1.Функция для создания массива из сгенерированных объектов.
 
@@ -107,14 +108,12 @@ generatePins();
 
 PIN_WRAPPER.appendChild(fragment);
 
-MAP.classList.add('map--faded');
-
-for (var i = 0; i < forms.children.length; i++) { // Добавление атрибута disabled для fieldset .ad-form
+for (var i = 0; i < forms.children.length; i++) { // Добавлено disabled для .ad-form
   forms.children[i].setAttribute('disabled', true);
 }
 
-for (i = 0; i < mapFilters.children.length; i++) { // Добавление атрибута disabled для .map__filters
-  mapFilters.children[i].setAttribute('disabled', true);
+for (i = 0; i < filters.children.length; i++) { // Добавлено disabled для .map__filters
+  filters.children[i].setAttribute('disabled', true);
 }
 
-
+MAP.classList.add('map--faded'); // Добавлен класс map--faded
