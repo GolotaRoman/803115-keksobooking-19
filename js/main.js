@@ -28,7 +28,7 @@ var PIN_WRAPPER = document.querySelector('.map__pins');
 var PIN_SIZE = 40;
 
 // Функции
-var generateRandomInt = function (min, max) {
+var generateRandomInt = function (min, max) { // Возвращает рандомное число в заданном диапазоне
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
@@ -36,10 +36,6 @@ var getRandomLength = function (data) { // Возвращает массив р�
   var copy = data.slice();
   copy.length = generateRandomInt(0, copy.length - 1);
   return copy;
-};
-
-var getRandomValue = function (value) { // Возвращает рандомный элемент массива
-  return value[Math.floor(Math.random() * value.length)];
 };
 
 // Переменные
@@ -57,11 +53,11 @@ var createArrayData = function (i) {
         'title': TITLE,
         'address': LOCATION,
         'price': generateRandomInt(1000, 10000),
-        'type': getRandomValue(HOUSING_TYPES),
+        'type': HOUSING_TYPES[generateRandomInt(0, CHECKIN_CHECKOUT_TIME.length)],
         'rooms': generateRandomInt(1, 4),
         'quests': generateRandomInt(1, 5),
-        'checkin': getRandomValue(CHECKIN_CHECKOUT_TIME),
-        'checkout': getRandomValue(CHECKIN_CHECKOUT_TIME),
+        'checkin': CHECKIN_CHECKOUT_TIME[generateRandomInt(0, CHECKIN_CHECKOUT_TIME.length)],
+        'checkout': CHECKIN_CHECKOUT_TIME[generateRandomInt(0, CHECKIN_CHECKOUT_TIME.length)],
         'features': getRandomLength(FEATURES),
         'description': DESCRIPTION,
         'photos': getRandomLength(PHOTOS)
