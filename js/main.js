@@ -40,6 +40,7 @@ var getRandomLength = function (data) { // Возвращает массив р�
 
 // Переменные
 var array = [];
+var forms = document.querySelector('.ad-form');
 
 // 1.Функция для создания массива из сгенерированных объектов.
 
@@ -73,7 +74,7 @@ var createArrayData = function (i) {
 
 // 2. У блока .map убран класс .map--faded.
 
-MAP.classList.remove('map--faded');
+// MAP.classList.remove('map--faded');
 
 // 3. Создание DOM элементов и заполнение их данными из массива.
 
@@ -104,3 +105,8 @@ generatePins();
 // 4. Отрисовка сгенерированных DOM-элементов в блок .map__pins.
 
 PIN_WRAPPER.appendChild(fragment);
+
+for (var i = 0; i < forms.children.length; i++) { // Добавление атрибута disabled для fieldset .ad-form
+  forms.children[i].setAttribute('disabled', true);
+}
+
