@@ -26,6 +26,10 @@ var MAP = document.querySelector('.map');
 var PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('.map__pin');
 var PIN_WRAPPER = document.querySelector('.map__pins');
 var PIN_SIZE = 40;
+var Keys = {
+  ESC_KEY: 'Escape',
+  ENTER_KEY: 'Enter'
+};
 
 // Функции
 var generateRandomInt = function (min, max) { // Возвращает рандомное число в заданном диапазоне
@@ -38,13 +42,49 @@ var getRandomLength = function (data) { // Возвращает массив р�
   return copy;
 };
 
+var turnPageInactive = function () { // Приводит страницу в неактивное состояние
+  for (var i = 0; i < forms.children.length; i++) {
+    forms.children[i].setAttribute('disabled', true);
+  }
+  for (i = 0; i < filters.children.length; i++) {
+    filters.children[i].setAttribute('disabled', true);
+  }
+  MAP.classList.add('map--faded');
+};
+
+var turnPageActive = function () { // Приводит страницу в ативное состояние
+  for (var i = 0; i < forms.children.length; i++) {
+    forms.children[i].setAttribute('disabled', false);
+  }
+  for (i = 0; i < filters.children.length; i++) {
+    filters.children[i].setAttribute('disabled', false);
+  }
+  MAP.classList.remove('map--faded');
+};
+
+var fillInTheAddressField = function () { // Заполнение поля Адрес
+  address.placeholder = 'left:' + mainPinElementX + ' ' + 'top:' + mainPinElementY;
+};
+
+var checkCorrectInput = function () { // Проверка правильности ввода (Количество гостей не должно превышать количество комнат)
+  if (numberOfGuests > numberOfRooms) {
+    return false;
+  }
+  return true;
+};
+
 // Переменные
 var array = [];
 var forms = document.querySelector('.ad-form');
 var filters = document.querySelector('.map__filters');
+var mapPinMain = document.querySelector('.map__pin--main');
+var mainPinElementX = document.querySelector('.map__pin--main').style.left;
+var mainPinElementY = document.querySelector('.map__pin--main').style.top;
+var address = document.querySelector('#address');
+var numberOfRooms = document.querySelector('#housing-rooms');
+var numberOfGuests = document.querySelector('#housing-guests');
 
-
-// 1.Функция для создания массива из сгенерированных объектов.
+// 3.2.1.Функция для создания массива из сгенерированных объектов.
 
 var createArrayData = function (i) {
   for (i = 0; i < OBJECTS_QUANTITY; i++) {
@@ -74,11 +114,11 @@ var createArrayData = function (i) {
   return array;
 };
 
-// 2. У блока .map убран класс .map--faded.
+// 3.2.2. У блока .map убран класс .map--faded.
 
 MAP.classList.remove('map--faded');
 
-// 3. Создание DOM элементов и заполнение их данными из массива.
+// 3.2.3. Создание DOM элементов и заполнение их данными из массива.
 
 var fragment = document.createDocumentFragment();
 
@@ -104,16 +144,31 @@ function generatePins() {
 }
 
 generatePins();
-// 4. Отрисовка сгенерированных DOM-элементов в блок .map__pins.
+// 3.2.4. Отрисовка сгенерированных DOM-элементов в блок .map__pins.
 
 PIN_WRAPPER.appendChild(fragment);
 
-for (var i = 0; i < forms.children.length; i++) { // Добавлено disabled для .ad-form
-  forms.children[i].setAttribute('disabled', true);
-}
+// Модуль 4.2
 
-for (i = 0; i < filters.children.length; i++) { // Добавлено disabled для .map__filters
-  filters.children[i].setAttribute('disabled', true);
-}
+turnPageInactive(); // Приводит страницу в стартовое неактивное состояние
 
-MAP.classList.add('map--faded'); // Добавлен класс map--faded
+mapPinMain.addEventListener('mousedown', function (evt) { // Приводит страницу в активное состояние при нажатии на пин ЛКМ мыши
+  if (evt.which === 1) {
+    turnPageActive();
+  }
+});
+
+mapPinMain.addEventListener('keydown', function (evt) { // Приводит страницу в активное состояние при нажатии Enter
+  if (evt.key === Keys.ENTER_KEY) {
+    turnPageActive();
+  }
+});
+
+fillInTheAddressField(); // Заполнение поля Адрес
+
+numberOfRooms.addEventListener('change', function () { // Выдает сообщение об ошибке при неправильном выборе количества комнат
+  if (!checkCorrectInput(numberOfGuests.value, numberOfRooms.value)) {
+    numberOfRooms.setCustomValidity('Вы ввели число комнат менее количества гостей');
+  }
+}
+);
