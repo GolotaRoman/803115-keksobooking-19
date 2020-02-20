@@ -50,16 +50,21 @@ var turnPageInactive = function () { // Приводит страницу в н�
     filters.children[i].setAttribute('disabled', true);
   }
   MAP.classList.add('map--faded');
+  document.querySelector('.ad-form').classList.add('ad-form--disabled');
 };
 
-var turnPageActive = function () { // Приводит страницу в ативное состояние
+var turnPageActive = function () { // Приводит страницу в активное состояние
   for (var i = 0; i < forms.children.length; i++) {
     forms.children[i].setAttribute('disabled', false);
   }
   for (i = 0; i < filters.children.length; i++) {
     filters.children[i].setAttribute('disabled', false);
   }
+  for (i = 0; i < mapFilters.length; i++) {
+    mapFilters[i].removeAttribute('disabled');
+  }
   MAP.classList.remove('map--faded');
+  document.querySelector('.ad-form').classList.remove('ad-form--disabled');
 };
 
 var fillInTheAddressField = function () { // Заполнение поля Адрес
@@ -83,6 +88,8 @@ var mainPinElementY = document.querySelector('.map__pin--main').style.top;
 var address = document.querySelector('#address');
 var numberOfRooms = document.querySelector('#housing-rooms');
 var numberOfGuests = document.querySelector('#housing-guests');
+var filter = document.querySelector('.map__filters');
+var mapFilters = filter.children;
 
 // 3.2.1.Функция для создания массива из сгенерированных объектов.
 
