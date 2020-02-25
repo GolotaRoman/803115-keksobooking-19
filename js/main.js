@@ -31,7 +31,31 @@ var Keys = {
   ENTER_KEY: 'Enter'
 };
 
+// Переменные
+var array = [];
+var forms = document.querySelector('.ad-form');
+var filters = document.querySelector('.map__filters');
+var mapPinMain = document.querySelector('.map__pin--main');
+var mainPinElementX = document.querySelector('.map__pin--main').style.left;
+var mainPinElementY = document.querySelector('.map__pin--main').style.top;
+var address = document.querySelector('#address');
+var numberOfRooms = document.querySelector('#housing-rooms');
+var numberOfGuests = document.querySelector('#housing-guests');
+var filter = document.querySelector('.map__filters');
+var mapFilters = filter.children;
+
 // Функции
+
+function generatePins() { // Отрисовывает пины на странице
+  var pinObjects = createArrayData();
+
+  pinObjects.forEach(function (item) {
+    var pinElement = getPinElement(item);
+
+    fragment.appendChild(pinElement);
+  });
+}
+
 var generateRandomInt = function (min, max) { // Возвращает рандомное число в заданном диапазоне
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
@@ -51,6 +75,9 @@ var turnPageInactive = function () { // Приводит страницу в н�
   }
   MAP.classList.add('map--faded');
   document.querySelector('.ad-form').classList.add('ad-form--disabled');
+  for (i = 1; i < document.querySelectorAll('.map__pin').length; i++) {
+    document.querySelectorAll('.map__pin')[i].setAttribute('hidden', true);
+  }
 };
 
 var turnPageActive = function () { // Приводит страницу в активное состояние
@@ -65,10 +92,18 @@ var turnPageActive = function () { // Приводит страницу в ак�
   }
   MAP.classList.remove('map--faded');
   document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+
+  for (i = 2; i < document.querySelector('.map__pins').children.length; i++) {
+    document.querySelector('.map__pins').children[i].removeAttribute('hidden');
+  }
+
+  for (i = 2; i < document.querySelector('.ad-form').children.length; i++) {
+    document.querySelector('.ad-form').children[i].removeAttribute('disabled');
+  }
 };
 
 var fillInTheAddressField = function () { // Заполнение поля Адрес
-  address.placeholder = 'left:' + mainPinElementX + ' ' + 'top:' + mainPinElementY;
+  address.placeholder = mainPinElementX + ' ' + mainPinElementY;
 };
 
 var checkCorrectInput = function () { // Проверка правильности ввода (Количество гостей не должно превышать количество комнат)
@@ -77,19 +112,6 @@ var checkCorrectInput = function () { // Проверка правильност
   }
   return true;
 };
-
-// Переменные
-var array = [];
-var forms = document.querySelector('.ad-form');
-var filters = document.querySelector('.map__filters');
-var mapPinMain = document.querySelector('.map__pin--main');
-var mainPinElementX = document.querySelector('.map__pin--main').style.left;
-var mainPinElementY = document.querySelector('.map__pin--main').style.top;
-var address = document.querySelector('#address');
-var numberOfRooms = document.querySelector('#housing-rooms');
-var numberOfGuests = document.querySelector('#housing-guests');
-var filter = document.querySelector('.map__filters');
-var mapFilters = filter.children;
 
 // 3.2.1.Функция для создания массива из сгенерированных объектов.
 
@@ -138,16 +160,6 @@ function getPinElement(pinObject) {
   pinElement.style.top = pinObject.location.y + (PIN_SIZE * Math.random()) + 'px';
 
   return pinElement;
-}
-
-function generatePins() {
-  var pinObjects = createArrayData();
-
-  pinObjects.forEach(function (item) {
-    var pinElement = getPinElement(item);
-
-    fragment.appendChild(pinElement);
-  });
 }
 
 generatePins();
