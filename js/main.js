@@ -8,27 +8,30 @@ var DESCRIPTION = 'some random description';
 var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
 var CHECKIN_CHECKOUT_TIME = ['12:00', '13:00', '14:00'];
 var HOUSING_TYPES = [
   'flat',
   'palace',
   'house',
-  'bungalo'];
+  'bungalo'
+];
 var FEATURES = [
   'wifi',
   'dishwasher',
   'parking',
   'washer',
   'elevator',
-  'conditioner'];
+  'conditioner'
+];
 var MAP = document.querySelector('.map');
 var PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('.map__pin');
 var PIN_WRAPPER = document.querySelector('.map__pins');
 var PIN_SIZE = 40;
 var Keys = {
-  ESC_KEY: 'Escape',
-  ENTER_KEY: 'Enter'
+  ESC: 'Escape',
+  ENTER: 'Enter'
 };
 
 // Переменные
@@ -39,14 +42,11 @@ var mapPinMain = document.querySelector('.map__pin--main');
 var mainPinElementX = document.querySelector('.map__pin--main').style.left;
 var mainPinElementY = document.querySelector('.map__pin--main').style.top;
 var address = document.querySelector('#address');
-var numberOfRooms = document.querySelector('#housing-rooms');
-var numberOfGuests = document.querySelector('#housing-guests');
 var filter = document.querySelector('.map__filters');
 var mapFilters = filter.children;
 
 // Функции
-
-function generatePins() { // Отрисовывает пины на странице
+var generatePins = function () { // Отрисовывает пины на странице
   var pinObjects = createArrayData();
 
   pinObjects.forEach(function (item) {
@@ -54,7 +54,8 @@ function generatePins() { // Отрисовывает пины на страни
 
     fragment.appendChild(pinElement);
   });
-}
+  console.log('+');
+};
 
 var generateRandomInt = function (min, max) { // Возвращает рандомное число в заданном диапазоне
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -74,13 +75,10 @@ var turnPageInactive = function () { // Приводит страницу в н�
     filters.children[i].setAttribute('disabled', true);
   }
   MAP.classList.add('map--faded');
-  document.querySelector('.ad-form').classList.add('ad-form--disabled');
-  for (i = 1; i < document.querySelectorAll('.map__pin').length; i++) {
-    document.querySelectorAll('.map__pin')[i].setAttribute('hidden', true);
-  }
 };
 
 var turnPageActive = function () { // Приводит страницу в активное состояние
+  generatePins();
   for (var i = 0; i < forms.children.length; i++) {
     forms.children[i].setAttribute('disabled', false);
   }
@@ -100,17 +98,11 @@ var turnPageActive = function () { // Приводит страницу в ак�
   for (i = 2; i < document.querySelector('.ad-form').children.length; i++) {
     document.querySelector('.ad-form').children[i].removeAttribute('disabled');
   }
+  document.querySelector('.ad-form__element').removeAttribute('disabled');
 };
 
 var fillInTheAddressField = function () { // Заполнение поля Адрес
-  address.placeholder = mainPinElementX + ' ' + mainPinElementY;
-};
-
-var checkCorrectInput = function () { // Проверка правильности ввода (Количество гостей не должно превышать количество комнат)
-  if (numberOfGuests > numberOfRooms) {
-    return false;
-  }
-  return true;
+  address.placeholder = parseInt(mainPinElementX, 10) + ',' + parseInt(mainPinElementY, 10);
 };
 
 // 3.2.1.Функция для создания массива из сгенерированных объектов.
@@ -162,7 +154,6 @@ function getPinElement(pinObject) {
   return pinElement;
 }
 
-generatePins();
 // 3.2.4. Отрисовка сгенерированных DOM-элементов в блок .map__pins.
 
 PIN_WRAPPER.appendChild(fragment);
@@ -185,9 +176,19 @@ mapPinMain.addEventListener('keydown', function (evt) { // Приводит ст
 
 fillInTheAddressField(); // Заполнение поля Адрес
 
+var numberOfRooms = document.querySelector('#room_number');
+var numberOfGuests = document.querySelector('#capacity');
+
 numberOfRooms.addEventListener('change', function () { // Выдает сообщение об ошибке при неправильном выборе количества комнат
-  if (!checkCorrectInput(numberOfGuests.value, numberOfRooms.value)) {
+  console.log(numberOfGuests.value > numberOfRooms.value);
+  if (numberOfGuests.value > numberOfRooms.value) {
     numberOfRooms.setCustomValidity('Вы ввели число комнат менее количества гостей');
   }
-}
-);
+});
+
+numberOfGuests.addEventListener('change', function () { // Выдает сообщение об ошибке при неправильном выборе количества комнат
+  console.log(numberOfGuests.value > numberOfRooms.value);
+  if (numberOfGuests.value > numberOfRooms.value) {
+    numberOfRooms.setCustomValidity('Вы ввели число комнат менее количества гостей');
+  }
+});
